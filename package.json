@@ -1,0 +1,170 @@
+{
+  "name": "system-prompt-inserter",
+  "displayName": "System Prompt Inserter",
+  "description": "Insert system prompts from your API into chat/editor with caching.",
+  "version": "0.1.0",
+  "publisher": "your-publisher",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:prompts.insertDefault",
+    "onCommand:prompts.choose",
+    "onCommand:prompts.attachDefault",
+    "onCommand:prompts.chooseAttach",
+    "onCommand:prompts.refreshCache",
+    "onCommand:prompts.setApiKey",
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "prompts.insertDefault",
+        "title": "Prompts: Insert Default System Prompt"
+      },
+      {
+        "command": "prompts.choose",
+        "title": "Prompts: Choose and Insert System Prompt"
+      },
+      {
+        "command": "prompts.attachDefault",
+        "title": "Prompts: Attach Default Prompt as File"
+      },
+      {
+        "command": "prompts.chooseAttach",
+        "title": "Prompts: Choose and Attach Prompt as File"
+      },
+      {
+        "command": "prompts.refreshCache",
+        "title": "Prompts: Refresh Prompts Cache"
+      },
+      {
+        "command": "prompts.clearCache",
+        "title": "Prompts: Clear Prompts Cache"
+      },
+      {
+        "command": "prompts.setApiKey",
+        "title": "Prompts: Set/Update API Key (Secret Storage)"
+      },
+      {
+        "command": "prompts.attachFromStatus",
+        "title": "Prompts: Attach Default (Status Button)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "prompts.attachDefault",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p",
+        "when": "true"
+      },
+      {
+        "command": "prompts.chooseAttach",
+        "key": "ctrl+alt+shift+p",
+        "mac": "cmd+alt+shift+p",
+        "when": "true"
+      }
+    ],
+    "menus": {
+      "statusBar/windowIndicator": [
+        {
+          "command": "prompts.attachFromStatus",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "System Prompts",
+      "properties": {
+        "prompts.apiBaseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Base URL of the Prompts API (e.g., https://api.example.com)",
+          "scope": "machine"
+        },
+        "prompts.defaultPromptId": {
+          "type": "string",
+          "default": "",
+          "description": "Default prompt id to insert when running 'Insert Default'.",
+          "scope": "window"
+        },
+        "prompts.cacheTtlMs": {
+          "type": "number",
+          "default": 86400000,
+          "description": "Cache TTL in milliseconds for prompts index and bodies (default 24h).",
+          "scope": "machine"
+        },
+        "prompts.maxBodies": {
+          "type": "number",
+          "default": 200,
+          "description": "Maximum number of prompt bodies to keep in cache before pruning (LRU).",
+          "scope": "machine"
+        },
+        "prompts.indexPath": {
+          "type": "string",
+          "default": "/api/prompts?size=1000&sort=title,ASC",
+          "description": "Path for list endpoint, appended to apiBaseUrl (e.g., /prompts or /api/v1/prompts).",
+          "scope": "machine"
+        },
+        "prompts.itemPathTemplate": {
+          "type": "string",
+          "default": "/api/prompts/{id}",
+          "description": "Path template for single prompt endpoint; {id} will be replaced (e.g., /prompts/{id} or /api/v1/prompts/{id}).",
+          "scope": "machine"
+        },
+        "prompts.indexResponsePath": {
+          "type": "string",
+          "default": "content",
+          "description": "Dot path to the array in index response if not at root (e.g., data.items). Leave blank if response is an array.",
+          "scope": "machine"
+        },
+        "prompts.fieldMap.id": {
+          "type": "string",
+          "default": "id",
+          "description": "JSON field name for prompt id in index and item responses.",
+          "scope": "machine"
+        },
+        "prompts.fieldMap.title": {
+          "type": "string",
+          "default": "title",
+          "description": "JSON field name for prompt title in index response (fallbacks: name, id).",
+          "scope": "machine"
+        },
+        "prompts.fieldMap.version": {
+          "type": "string",
+          "default": "version",
+          "description": "JSON field name for prompt version in index/item responses (optional).",
+          "scope": "machine"
+        },
+        "prompts.fieldMap.updatedAt": {
+          "type": "string",
+          "default": "updatedAt",
+          "description": "JSON field name for last updated in index/item responses (optional).",
+          "scope": "machine"
+        },
+        "prompts.fieldMap.body": {
+          "type": "string",
+          "default": "content",
+          "description": "JSON field name (dot path supported) for prompt body in the item response (fallback: content).",
+          "scope": "machine"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "mock": "node scripts/mock-server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.34",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.5.4"
+  }
+}
+
+
