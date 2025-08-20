@@ -7,7 +7,26 @@ Insert system prompts from your API into chat/editor with caching. Attach long p
 2. Run `npm install`.
 3. Press F5 to launch the Extension Development Host.
 
-### Local test with mock API
+### Use with your backend (no mock)
+1. Start your Spring Boot backend (default: `http://localhost:8081`).
+2. In Settings (User or Workspace), set:
+   - `prompts.apiBaseUrl`: `http://localhost:8081`
+   - `prompts.indexPath`: `/api/prompts?size=1000&sort=title,ASC`
+   - `prompts.itemPathTemplate`: `/api/prompts/{id}`
+   - `prompts.indexResponsePath`: `content`
+   - `prompts.fieldMap.id`: `id`
+   - `prompts.fieldMap.title`: `title`
+   - `prompts.fieldMap.body`: `content`
+   - Optional first sync: set `prompts.cacheTtlMs` to `0`
+3. Force a fresh sync once:
+   - Run `Prompts: Clear Prompts Cache`
+   - Run `Developer: Reload Window`
+   - Run `Prompts: Refresh Prompts Cache`
+4. Use the status bar buttons (bottom-left):
+   - “Attach Prompt” to attach your default prompt (set `prompts.defaultPromptId`)
+   - “Choose Prompt” to list and attach from your API
+
+### Local test with mock API (optional)
 1. In a terminal, start the mock server:
    ```bash
    npm run mock
