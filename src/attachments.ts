@@ -30,7 +30,9 @@ export async function createPromptAttachment(
   const base = slugify(title || id);
   const filename = `${base}.md`;
   const uri = vscode.Uri.joinPath(dir, filename);
-  const content = `# ${title || id}\n\n<!-- prompt-id: ${id} -->\n\n${body}\n`;
+  const includeHeader = vscode.workspace.getConfiguration('prompts').get<boolean>('attachIncludeHeader') ?? false;
+  const header = includeHeader ? `# ${title || id}\n\n<!-- prompt-id: ${id} -->\n\n` : '';
+  const content = `${header}${body}\n`;
   const data = Buffer.from(content, 'utf8');
   await vscode.workspace.fs.writeFile(uri, data);
   return uri;

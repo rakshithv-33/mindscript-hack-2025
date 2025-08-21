@@ -34,6 +34,14 @@ export class PromptService {
   }
 
   async getPromptBody(id: string): Promise<string> {
+    // Allow override for default prompt
+    const cfg = vscode.workspace.getConfiguration('prompts');
+    const defaultId = cfg.get<string>('defaultPromptId')?.trim();
+    const override = cfg.get<string>('defaultPromptOverrideBody')?.trim();
+    if (override && defaultId && id === defaultId) {
+      return override;
+    }
+
     const bodyKey = id; // with current API, versioning optional. Can be extended to `${id}:${version}`.
     const cached = this.cache.getBody(bodyKey);
     if (cached && this.cache.isBodyFresh(cached)) {

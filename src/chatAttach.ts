@@ -19,6 +19,9 @@ export async function tryAttachFileToChat(uri: vscode.Uri): Promise<boolean> {
     'github.copilot.chat.attachFiles',
     'cursor.chat.attachFiles',
     'cursor.attachFilesToChat',
+    // Windsurf and other forks may expose their own attach command ids
+    'windsurf.chat.attachFiles',
+    'windsurf.attachFilesToChat',
   ].filter((c) => all.includes(c));
 
   for (const cmd of candidates) {
@@ -50,6 +53,9 @@ async function focusChatIfPossible(): Promise<boolean> {
     'cursor.openChat',
     'vscode.chat.focus',
     'workbench.action.openChat',
+    // Windsurf focus/open chat if available
+    'windsurf.openChat',
+    'windsurf.chat.open',
   ];
   const all = await vscode.commands.getCommands(true);
   for (const cmd of known) {

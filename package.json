@@ -104,6 +104,18 @@
           "description": "Maximum number of prompt bodies to keep in cache before pruning (LRU).",
           "scope": "machine"
         },
+        "prompts.defaultPromptOverrideBody": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "If set, this text is used for the default prompt (prompts.defaultPromptId) instead of fetching from the API.",
+          "scope": "window"
+        },
+        "prompts.attachIncludeHeader": {
+          "type": "boolean",
+          "default": false,
+          "description": "When attaching, include a Markdown title and hidden prompt-id comment above the body.",
+          "scope": "window"
+        },
         "prompts.indexPath": {
           "type": "string",
           "default": "/api/prompts?size=1000&sort=title,ASC",
